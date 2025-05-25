@@ -55,6 +55,21 @@ const App = () => {
       })
   }
 
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          alert(`Information of ${name} has already been removed from server`)
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+  
+
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -76,7 +91,7 @@ const App = () => {
 
 
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} onDelete={handleDelete} />
     </div>
   )
 
