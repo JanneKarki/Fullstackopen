@@ -35,9 +35,31 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const nameExists = persons.some(person => person.name === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
+    const existingPerson = persons.find(p => p.name === newName)
+
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to the phonebook, replace the old number with a new one?`
+      )
+
+      if (confirmUpdate) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
+  
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(p =>
+              p.id !== existingPerson.id ? p : returnedPerson
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            alert(`Information of ${newName} has already been removed from server`)
+            setPersons(persons.filter(p => p.id !== existingPerson.id))
+          })
+      }
+
       return
     }
 
@@ -63,17 +85,15 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== id))
         })
         .catch(error => {
-          alert(`Information of ${name} has already been removed from server`)
+          alert(`Person of ${name} has already been removed from server`)
           setPersons(persons.filter(p => p.id !== id))
         })
     }
   }
-  
 
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
-
 
   return (
     <div>
@@ -88,7 +108,6 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
-
 
       <h3>Numbers</h3>
       <Persons persons={personsToShow} onDelete={handleDelete} />
