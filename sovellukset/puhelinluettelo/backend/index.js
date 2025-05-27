@@ -8,12 +8,23 @@ const persons = [
   { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' }
 ]
 
+app.get('/info', (request, response) => {
+    const count = persons.length;
+    const date = new Date();
+  
+    response.send(`
+      <p>Phonebook has info for ${count} people</p>
+      <p>${date}</p>
+    `);
+  });
+  
+
 app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
 app.get('/', (req, res) => {
-    res.send('This is phonebook backend. Go to api/persons')
+    res.send('This is phonebook backend. Go to api/persons or /info')
   })
 
 const PORT = 3002
