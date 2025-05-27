@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
   { id: 1, name: 'Arto Hell', number: '040-123456' },
   { id: 2, name: 'Ada Lovelace', number: '39-44-5323523' },
@@ -9,14 +11,14 @@ let persons = [
 ]
 
 app.get('/info', (request, response) => {
-    const count = persons.length;
-    const date = new Date();
+    const count = persons.length
+    const date = new Date()
   
     response.send(`
       <p>Phonebook has info for ${count} people</p>
       <p>${date}</p>
-    `);
-  });
+    `)
+  })
   
 
 app.get('/api/persons', (req, res) => {
@@ -44,8 +46,30 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
-});
+})
 
+const generateId = () => {
+    
+    return Math.floor(Math.random() * 10000000)
+  }
+
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    console.log(body)
+    if (!body.name || !body.number) {
+      return response.status(400).json({ error: 'Name or number missing' })
+    }
+  
+    const person = {
+      id: generateId(),
+      name: body.name,
+      number: body.number,
+    }
+  
+    persons = persons.concat(person)
+    response.json(person)
+  })
 
 const PORT = 3002
 app.listen(PORT, () => {
