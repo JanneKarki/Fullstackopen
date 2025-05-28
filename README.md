@@ -1,8 +1,7 @@
 # Fullstackopen
 Fullstack open kurssin tehtävien palautus repositorio
 
-[Osa0](https://github.com/JanneKarki/Fullstackopen/blob/main/osa_0/README.md)
+[main](https://github.com/JanneKarki/Fullstackopen)
 
-[Osa1](https://github.com/JanneKarki/Fullstackopen/tree/osa1)
-
-[Osa2](https://github.com/JanneKarki/Fullstackopen/tree/osa2)
+Backend julkaistu Fly.io:ssa
+[Puhelinluettelo-backend](https://backend-lively-water-807.fly.dev/api/persons)
