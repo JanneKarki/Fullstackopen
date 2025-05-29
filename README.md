@@ -8,7 +8,7 @@ Fullstack open kurssin tehtävien palautus repositorio
 
 - Puhelinluettelon backend käyttää MongoDB-tietokantaa.
  
-- Julkaistu Fly.io:ssa -> [Linkki](https://backend-lively-water-807.fly.dev/api/persons)
+- Julkaistu Fly.io:ssa -> [Linkki](https://backend-lively-water-807.fly.dev)
 
 ---
 
