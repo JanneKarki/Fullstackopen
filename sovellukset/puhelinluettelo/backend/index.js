@@ -19,16 +19,7 @@ morgan.token('body', (req) => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 
-let persons = [
-  { id: 1, name: 'Arto Hell', number: '040-123456' },
-  { id: 2, name: 'Ada Lovelace', number: '39-44-5323523' },
-  { id: 3, name: 'Dan Abramov', number: '12-43-234345' },
-  { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' }
-]
-
 app.get('/info', (request, response) => {
-    const count = persons.length
-    const date = new Date()
     Person.countDocuments({}).then(count => {
         const date = new Date()
         response.send(`
@@ -74,20 +65,15 @@ app.post('/api/persons', (request, response) => {
     if (!body.name || !body.number) {
         return response.status(400).json({ error: 'Name or number missing' })
     }
-
-    const nameExists = persons.some(p => p.name === body.name)
-    if (nameExists) {
-        return response.status(400).json({ error: 'name must be unique' })
-    }
   
-    const person = {
-      id: Math.floor(Math.random() * 10000000),
-      name: body.name,
-      number: body.number,
-    }
+    const person = new Person({
+        name: body.name,
+        number: body.number,
+    })
   
-    persons = persons.concat(person)
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT =  process.env.PORT || 3000
