@@ -27,30 +27,16 @@ app.get('/info', (request, response) => {
           <p>${date}</p>
         `)
       })
+      
     })
   
 
-app.get('/api/persons', (req, res) => {
-    Person.find({}).then(persons => {
-        res.json(persons)
-      })
+app.get('/api/persons', (req, res, next) => {
+  Person.find({})
+    .then(persons => res.json(persons))
+    .catch(error => next(error))
 })
 
-app.get('/', (req, res) => {
-    res.send('This is phonebook backend. Go to api/persons or /info')
-})
-
-
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-  
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
-})
 
 app.delete('/api/persons/:id', (request, response) => {
     Person.findByIdAndDelete(request.params.id)
@@ -66,17 +52,33 @@ app.post('/api/persons', (request, response) => {
     if (!body.name || !body.number) {
         return response.status(400).json({ error: 'Name or number missing' })
     }
-  
     const person = new Person({
         name: body.name,
         number: body.number,
     })
-  
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
+    person.save()
+    .then(savedPerson => {response.json(savedPerson)
+    .catch(error => next(error))
     })
+
 })
 
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({ error: 'unknown endpoint' })
+  }
+  app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.name, error.message)
+
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+  next(error)
+
+
+}
+app.use(errorHandler)
 const PORT =  process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
