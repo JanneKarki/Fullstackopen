@@ -15,9 +15,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
-  const [notificationType, setNotificationType] = useState('success')
+  const [notificationType, setNotificationType] = useState('error')
 
-  const showNotification = (msg, type = 'success') => {
+  const showNotification = (msg, type = 'error') => {
     setNotification(msg)
     setNotificationType(type)
     setTimeout(() => {
@@ -89,6 +89,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         showNotification(`Added ${returnedPerson.name}`, 'success')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        showNotification(error.response.data.error, 'error')
       })
   }
 

@@ -76,7 +76,7 @@ app.delete('/api/persons/:id', (request, response) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
     console.log(body)
     if (!body.name || !body.number) {
@@ -87,10 +87,10 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     })
     person.save()
-    .then(savedPerson => {response.json(savedPerson)
-    .catch(error => next(error))
+    .then(savedPerson => {
+        response.json(savedPerson)
     })
-
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (req, res) => {
