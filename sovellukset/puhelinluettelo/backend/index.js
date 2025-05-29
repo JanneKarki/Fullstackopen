@@ -56,7 +56,18 @@ app.put('/api/persons/:id', (request, response, next) => {
       .catch(error => next(error))
   })
   
-  
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error)) // siirretään virhe virheenkäsittelyyn
+})
+
 app.delete('/api/persons/:id', (request, response) => {
     Person.findByIdAndDelete(request.params.id)
     .then(() => {
@@ -92,10 +103,10 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
+  } else if (error.name === 'CastError') {
+    return response.status(400).json({ error: 'Not ok id' })
   }
   next(error)
-
-
 }
 app.use(errorHandler)
 const PORT =  process.env.PORT || 3000
