@@ -69,11 +69,17 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-            showNotification(`Information of ${newName} has already been removed from server`, 'error')
-            setPersons(persons.filter(p => p.id !== existingPerson.id))
-          })
-      }
-
+            if (error.response && error.response.data && error.response.data.error) {
+              showNotification(error.response.data.error, 'error')
+            } else {
+              showNotification(`Information of ${newName} has already been removed from server`, 'error')
+            }
+            if (error.response && error.response.status === 404) {
+              setPersons(persons.filter(p => p.id !== existingPerson.id))
+            }
+      })
+    }
+    
       return
     }
 

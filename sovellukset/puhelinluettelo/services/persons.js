@@ -1,5 +1,5 @@
 // services/persons.js
-const axios = require('axios')
+import axios from 'axios'
 
 const baseUrl = '/api/persons'
 
@@ -17,4 +17,4 @@ const update = (id, updatedPerson) => {
   return axios.put(`${baseUrl}/${id}`, updatedPerson).then(res => res.data)
 }
 
-module.exports = { getAll, create, remove, update }
+export default { getAll, create, remove, update }
