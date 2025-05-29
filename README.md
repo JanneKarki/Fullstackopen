@@ -2,14 +2,13 @@
 Fullstack open kurssin tehtävien palautus repositorio
 
 
-## Sovellukset
+Osiot etenevät branceihittäin:
 
-### Puhelinluettelo
+[Osa0](https://github.com/JanneKarki/Fullstackopen/blob/main/osa_0/README.md)
 
-- Puhelinluettelon backend käyttää MongoDB-tietokantaa.
- 
-- Julkaistu Fly.io:ssa -> [Linkki](https://backend-lively-water-807.fly.dev)
+[Osa1](https://github.com/JanneKarki/Fullstackopen/tree/osa1)
 
----
+[Osa2](https://github.com/JanneKarki/Fullstackopen/tree/osa2)
 
-### Back to [main](https://github.com/JanneKarki/Fullstackopen) -branch
+[Osa3](https://github.com/JanneKarki/Fullstackopen/tree/osa3)
+
