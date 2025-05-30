@@ -94,4 +94,20 @@ describe('Adding a new blog', () => {
     })
   })
   
-  
+describe('When likes are missing', () => {
+  test('it is 0', async () => {
+    const blogWithoutLikes = {
+        title: "First class tests",
+        author: "Robert C. Martin",
+        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    }
+
+    const response = await api
+      .post('/api/blogs')
+      .send(blogWithoutLikes)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response.body.likes, 0)
+  })
+})
