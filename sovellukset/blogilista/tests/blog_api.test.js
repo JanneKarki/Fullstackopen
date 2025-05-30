@@ -9,28 +9,22 @@ const api = supertest(app)
 
 const initialBlogs = [
     {
-        _id: "5a422a851b54a676234d17f7",
         title: "React patterns",
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
         likes: 7,
-        __v: 0
       },
       {
-        _id: "5a422aa71b54a676234d17f8",
         title: "Go To Statement Considered Harmful",
         author: "Edsger W. Dijkstra",
         url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
         likes: 5,
-        __v: 0
       },
       {
-        _id: "5a422b3a1b54a676234d17f9",
         title: "Canonical string reduction",
         author: "Edsger W. Dijkstra",
         url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
         likes: 12,
-        __v: 0
       },
 ]
 
@@ -64,3 +58,40 @@ describe('Saved blogs are valid', () => {
     assert.strictEqual(blog._id, undefined)
     })
 })
+
+describe('Adding a new blog', () => {
+    const newBlog = {
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+    }
+  
+    test('blog count increases by one', async () => {
+      const blogsAtStart = await api.get('/api/blogs')
+  
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+  
+      const blogsAtEnd = await api.get('/api/blogs')
+      assert.strictEqual(blogsAtEnd.body.length, blogsAtStart.body.length + 1)
+    })
+  
+    test('the added blog content is correct', async () => {
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+  
+      const blogsAtEnd = await api.get('/api/blogs')
+      const titles = blogsAtEnd.body.map(blog => blog.title)
+  
+      assert(titles.includes(newBlog.title))
+    })
+  })
+  
+  
