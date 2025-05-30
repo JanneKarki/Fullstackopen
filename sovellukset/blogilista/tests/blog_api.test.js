@@ -1,4 +1,4 @@
-const { test, beforeEach, after } = require('node:test')
+const { test, describe, beforeEach, after } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -38,19 +38,29 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(initialBlogs)
 })
-
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-})
-
-test('correct amount of blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
-  assert.strictEqual(response.body.length, initialBlogs.length)
-})
-
 after(async () => {
-  await mongoose.connection.close()
+    await mongoose.connection.close()
+})
+
+describe('Saved blogs are valid', () => {
+    test('blogs are returned as json', async () => {
+    await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test('correct amount of blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body.length, initialBlogs.length)
+    })
+
+
+    test('unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs')
+
+    const blog = response.body[0]
+    assert.ok(blog.id) // Check that 'id' exists
+    assert.strictEqual(blog._id, undefined)
+    })
 })
