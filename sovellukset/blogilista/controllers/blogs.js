@@ -2,6 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 
 blogsRouter.get('/', async (request, response) => {
@@ -47,12 +48,29 @@ blogsRouter.post('/', async (request, response, next) => {
 })
 
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response, next) => {
   try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
+    console.log('Request ID:', request.params.id)
+    const blog = await Blog.findById(request.params.id)
+    console.log('Löydetty blogi:', blog)
+
+    //if (!blog) {
+    //  return response.status(404).json({ error: 'blog not found' })
+    //}
+
+    if (blog.user.toString() !== decodedToken.id.toString()) {
+      return response.status(401).json({ error: 'unauthorized deletion' })
+    }
+
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } catch (error) {
-    response.status(400).json({ error: 'malformatted id' })
+    next(error)
   }
 })
 

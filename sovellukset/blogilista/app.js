@@ -20,7 +20,6 @@ app.use(express.json())
 app.use(tokenExtractor)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
-app.use(errorHandler)
 app.use('/api/login', loginRouter)
-
+app.use(errorHandler)
 module.exports = app
