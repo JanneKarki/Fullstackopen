@@ -50,20 +50,15 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   try {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
+    const user = request.user
+
+    const blog = await Blog.findById(request.params.id)
+
+    if (!blog) {
+      return response.status(404).json({ error: 'blog not found' })
     }
 
-    console.log('Request ID:', request.params.id)
-    const blog = await Blog.findById(request.params.id)
-    console.log('Löydetty blogi:', blog)
-
-    //if (!blog) {
-    //  return response.status(404).json({ error: 'blog not found' })
-    //}
-
-    if (blog.user.toString() !== decodedToken.id.toString()) {
+    if (blog.user.toString() !== user.id.toString()) {
       return response.status(401).json({ error: 'unauthorized deletion' })
     }
 
