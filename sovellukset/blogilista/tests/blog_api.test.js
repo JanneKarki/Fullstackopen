@@ -111,3 +111,33 @@ describe('When likes are missing', () => {
     assert.strictEqual(response.body.likes, 0)
   })
 })
+
+describe('Invalid blog post data', () => {
+    test('400 Bad Request if title is missing', async () => {
+      const blogWithoutTitle = {
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+      }
+  
+      await api
+        .post('/api/blogs')
+        .send(blogWithoutTitle)
+        .expect(400)
+    })
+  
+    test('400 Bad Request if url is missing', async () => {
+      const blogWithoutUrl = {
+        title: "React patterns",
+        author: "Michael Chan",
+
+        likes: 7,
+      }
+  
+      await api
+        .post('/api/blogs')
+        .send(blogWithoutUrl)
+        .expect(400)
+    })
+  })
+  
