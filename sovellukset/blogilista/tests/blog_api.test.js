@@ -159,3 +159,21 @@ describe('deletion of a blog', () => {
         assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
     })
 })
+
+describe('updating a blog', () => {
+    test('succeeds in updating likes', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+  
+      const updatedLikes = { likes: blogToUpdate.likes + 10 }
+  
+      const response = await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedLikes)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+  
+      assert.strictEqual(response.body.likes, blogToUpdate.likes + 10)
+    })
+  })
+  
