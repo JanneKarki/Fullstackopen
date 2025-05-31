@@ -8,7 +8,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const { title, url } = request.body
-  
+
   if (!title || !url) {
     return response.status(400).json({ error: 'title or url missing' })
   }
@@ -16,5 +16,15 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await blog.save()
   response.status(201).json(savedBlog)
 })
+
+blogsRouter.delete('/:id', async (request, response) => {
+  try {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (error) {
+    response.status(400).json({ error: 'malformatted id' })
+  }
+})
+
 
 module.exports = blogsRouter
