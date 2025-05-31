@@ -7,3 +7,15 @@ Content-Type: application/json
   "url": "https://patts.com/",
   "likes": 3
 }
+
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "karkij",
+  "name": "Janne krki",
+  "password": "salasana123"
+}
