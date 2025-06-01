@@ -12,3 +12,5 @@ Osiot etenevät branceihittäin:
 
 [Osa3](https://github.com/JanneKarki/Fullstackopen/tree/osa3)
 
+[Osa4](https://github.com/JanneKarki/Fullstackopen/tree/osa4)
+
