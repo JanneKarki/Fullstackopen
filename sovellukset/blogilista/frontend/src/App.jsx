@@ -70,6 +70,21 @@ const App = () => {
       notifyError('Failed to create blog')
     }
   }
+  const handleLike = async (blogToUpdate) => {
+    const updatedBlog = {
+      ...blogToUpdate,
+      user: blogToUpdate.user.id, // Vain käyttäjän ID backendille
+      likes: blogToUpdate.likes + 1,
+    }
+  
+    try {
+      const returnedBlog = await blogService.update(blogToUpdate.id, updatedBlog)
+      setBlogs(blogs.map(blog => blog.id !== blogToUpdate.id ? blog : returnedBlog))
+    } catch (error) {
+      notifyError('Failed to like blog')
+    }
+  }
+  
   
   if (user === null) {
     return (
@@ -95,7 +110,8 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} onLike={() => handleLike(blog)} />
+
       )}
     </div>
   )
