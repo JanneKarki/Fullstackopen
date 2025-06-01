@@ -34,12 +34,12 @@ const App = () => {
     setNotification(message)
     setTimeout(() => setNotification(null), duration)
   }
-  
+
   const notifyError = (message, duration = 5000) => {
     setErrorMessage(message)
     setTimeout(() => setErrorMessage(null), duration)
   }
-  
+
 
   const handleLogin = async (credentials) => {
     try {
@@ -83,7 +83,7 @@ const App = () => {
       user: blogToUpdate.user.id, // Vain käyttäjän ID backendille
       likes: blogToUpdate.likes + 1,
     }
-  
+
     try {
       const returnedBlog = await blogService.update(blogToUpdate.id, updatedBlog)
       returnedBlog.user = user
@@ -92,11 +92,11 @@ const App = () => {
       notifyError('Failed to like blog')
     }
   }
-  
+
   const handleDelete = async (blogToDelete) => {
     const ok = window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author}?`)
     if (!ok) return
-  
+
     try {
       await blogService.remove(blogToDelete.id)
       setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
@@ -105,18 +105,18 @@ const App = () => {
       notifyError('Failed to delete blog')
     }
   }
-  
-  
+
+
   if (user === null) {
     return (
-    <div>
-      <h2>Log in to application</h2>
-      <Notification message={notification} />
-      <ErrorNotification message={errorMessage} />
+      <div>
+        <h2>Log in to application</h2>
+        <Notification message={notification} />
+        <ErrorNotification message={errorMessage} />
 
-      <LoginForm onLogin={handleLogin} />
-    </div>
-  )
+        <LoginForm onLogin={handleLogin} />
+      </div>
+    )
   }
 
   return (
@@ -135,13 +135,13 @@ const App = () => {
         .sort((a, b) => b.likes - a.likes) // laskeva järjestys
         .map(blog =>
           <Blog
-            key={blog.id} 
+            key={blog.id}
             blog={blog}
             onLike={() => handleLike(blog)}
             onDelete={() => handleDelete(blog)}
             currentUser={user}
-            />
-      )}
+          />
+        )}
 
     </div>
   )
