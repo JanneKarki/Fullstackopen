@@ -62,6 +62,12 @@ const App = () => {
   const createBlog = async (blogObject) => {
     try {
       const newBlog = await blogService.create(blogObject)
+
+      newBlog.user = {
+        id: user.id,
+        name: user.name,
+        username: user.username
+      }
       setBlogs(blogs.concat(newBlog))
       notify(`a new blog "${newBlog.title}" by ${newBlog.author} added`)
       blogFormRef.current.toggleVisibility()
@@ -71,6 +77,7 @@ const App = () => {
     }
   }
   const handleLike = async (blogToUpdate) => {
+    const user = blogToUpdate.user
     const updatedBlog = {
       ...blogToUpdate,
       user: blogToUpdate.user.id, // Vain käyttäjän ID backendille
@@ -79,7 +86,8 @@ const App = () => {
   
     try {
       const returnedBlog = await blogService.update(blogToUpdate.id, updatedBlog)
-      setBlogs(blogs.map(blog => blog.id !== blogToUpdate.id ? blog : returnedBlog))
+      returnedBlog.user = user
+      setBlogs(blogs.map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog))
     } catch (error) {
       notifyError('Failed to like blog')
     }
