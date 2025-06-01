@@ -93,6 +93,19 @@ const App = () => {
     }
   }
   
+  const handleDelete = async (blogToDelete) => {
+    const ok = window.confirm(`Remove blog ${blogToDelete.title} by ${blogToDelete.author}?`)
+    if (!ok) return
+  
+    try {
+      await blogService.remove(blogToDelete.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+      notify(`Deleted blog: ${blogToDelete.title}`)
+    } catch (error) {
+      notifyError('Failed to delete blog')
+    }
+  }
+  
   
   if (user === null) {
     return (
@@ -121,7 +134,13 @@ const App = () => {
         .slice()
         .sort((a, b) => b.likes - a.likes) // laskeva järjestys
         .map(blog =>
-          <Blog key={blog.id} blog={blog} onLike={() => handleLike(blog)} />
+          <Blog
+            key={blog.id} 
+            blog={blog}
+            onLike={() => handleLike(blog)}
+            onDelete={() => handleDelete(blog)}
+            currentUser={user}
+            />
       )}
 
     </div>
