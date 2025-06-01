@@ -117,10 +117,13 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onLike={() => handleLike(blog)} />
-
+      {blogs
+        .slice()
+        .sort((a, b) => b.likes - a.likes) // laskeva järjestys
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} onLike={() => handleLike(blog)} />
       )}
+
     </div>
   )
 }
