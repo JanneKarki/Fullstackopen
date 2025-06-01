@@ -23,11 +23,15 @@ Content-Type: application/json
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1laXRzaTIiLCJpZCI6IjY4M2I1MjUzZjE2YzMwNWIzMDlhZWM2NyIsImlhdCI6MTc0ODcxODE2NX0._qeFNdMVKuiaxhsMpRqeicN3KT5yIn-Qn5-MXvyAgH8
-
-{
-  "title": "TEST-testiblogi",
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC
+  "title": "VILLI-testiblogi",
   "author": "Postman",
   "url": "https://example.com/testiblogi",
   "likes": 3
 }
+
+
+### Deletion test
+
+DELETE http://localhost:3003/api/blogs/683b6207b316f700a5ce836f
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
