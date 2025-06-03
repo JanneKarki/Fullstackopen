@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 import userEvent from '@testing-library/user-event'
-import { describe, test, beforeEach, expect } from 'vitest'
-
+import { describe, test, beforeEach, expect, vi } from 'vitest'
+import BlogForm from './BlogForm'
 
 
 describe('Blog component', () => {
@@ -60,5 +60,25 @@ describe('Blog component', () => {
 
     expect(mockHandler.mock.calls).toHaveLength(2)
   })
+  test('createBlog with correct data when submitted', async () => {
+    const createBlog = vi.fn()
+    const user = userEvent.setup()
 
+    render(<BlogForm createBlog={createBlog} />)
+
+    const inputs = screen.getAllByRole('textbox')
+    const createButton = screen.getByText('create')
+
+    await user.type(inputs[0], 'React Testing')
+    await user.type(inputs[1], 'Tester')
+    await user.type(inputs[2], 'http://react-testing.com')
+    await user.click(createButton)
+
+    expect(createBlog).toHaveBeenCalledTimes(1)
+    expect(createBlog.mock.calls[0][0]).toEqual({
+      title: 'React Testing',
+      author: 'Tester',
+      url: 'http://react-testing.com'
+    })
+  })
 })
