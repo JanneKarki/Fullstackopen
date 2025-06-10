@@ -19,4 +19,20 @@ describe('Blog app', () => {
     await expect(page.getByTestId('password')).toBeVisible()
     await expect(page.getByRole('button', { name: 'login' })).toBeVisible()
   })
+
+  test('Successful login', async ({ page }) => {
+    await page.getByTestId('username').fill('meitsi2')
+    await page.getByTestId('password').fill('salasana')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await page.waitForSelector('text=testaaja logged in') 
+  })
+
+  test('Unsuccessful login', async ({ page }) => {
+    await page.getByTestId('username').fill('meitsi2')
+    await page.getByTestId('password').fill('vääräsalasana')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await expect(page.locator('.error')).toContainText('Wrong username or password')
+  })
 })
