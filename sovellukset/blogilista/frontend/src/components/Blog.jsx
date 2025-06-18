@@ -11,7 +11,7 @@ const Blog = ({ blog, onLike, onDelete, currentUser }) => {
 
   if (!visible) {
     return (
-      <div className="blog">
+      <div className="blog" data-testid="blog">
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>view</button>
       </div>
@@ -19,7 +19,7 @@ const Blog = ({ blog, onLike, onDelete, currentUser }) => {
   }
 
   return (
-    <div className="blog">
+    <div className="blog" data-testid="blog">
       <div>
         <div>{blog.title}</div>
         <div>{blog.author}</div>
