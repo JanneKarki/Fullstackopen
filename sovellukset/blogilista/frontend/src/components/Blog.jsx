@@ -27,7 +27,8 @@ const Blog = ({ blog, onLike, onDelete, currentUser }) => {
       </div>
       <div>{blog.url}</div>
       <div>
-        likes {blog.likes} <button onClick={onLike}>like</button>
+      likes <span data-testid="likes-count">{blog.likes}</span>{' '}
+        <button onClick={onLike}>like</button>
       </div>
       <div>{blog.user?.name}</div>
       {isOwner && (

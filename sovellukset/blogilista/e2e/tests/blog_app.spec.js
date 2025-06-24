@@ -51,13 +51,14 @@ describe('When logged in', () => {
 
     await page.goto('/')
     await page.waitForLoadState('networkidle')
-  })
 
-  test('create new blog', async ({ page }) => {
     await page.getByTestId('username').fill('meitsi2')
     await page.getByTestId('password').fill('salasana')
     await page.getByRole('button', { name: 'login' }).click()
     await expect(page.locator('text=testaaja logged in')).toBeVisible()
+  })
+
+  test('create new blog', async ({ page }) => {
 
     await page.getByRole('button', { name: 'new blog' }).click() 
   
@@ -70,4 +71,30 @@ describe('When logged in', () => {
     await blog.waitFor({ state: 'visible', timeout: 10000 })
     await expect(blog).toHaveText(/Playwright blogi/)
     })  
+
+  test('like a blog', async ({ page, request }) => {
+
+    await page.getByRole('button', { name: 'new blog' }).click()
+    await page.getByTestId('title').fill('Likettävä blogi')
+    await page.getByTestId('author').fill('Testaaja')
+    await page.getByTestId('url').fill('https://testi.com')
+    await page.getByRole('button', { name: 'create' }).click()
+
+    await page.getByText('Likettävä blogi Testaaja').getByRole('button', { name: 'view' }).click()
+    const likeButton = page.getByRole('button', { name: 'like' })
+    const likes = page.getByTestId('likes-count')
+    
+    
+    
+    const likesBefore = await likes.innerText()
+
+    console.log('Likes before:', likesBefore)
+    await expect(likes).toHaveText('0')
+
+    await likeButton.click()
+
+    const likesAfter = await likes.innerText()
+    console.log('Likes after:', likesAfter)
+    await expect(likes).toHaveText('1')
+  })
 })
