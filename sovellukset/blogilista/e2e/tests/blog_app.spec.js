@@ -97,4 +97,24 @@ describe('When logged in', () => {
     console.log('Likes after:', likesAfter)
     await expect(likes).toHaveText('1')
   })
+
+  test('user can delete their own blog', async ({ page }) => {
+    await page.getByRole('button', { name: 'new blog' }).click()
+    await page.getByTestId('title').fill('Poistettava blogi')
+    await page.getByTestId('author').fill('Testaaja')
+    await page.getByTestId('url').fill('https://poisto.com')
+    await page.getByRole('button', { name: 'create' }).click()
+  
+    const blog = page.getByText('Poistettava blogi Testaaja')
+    await blog.getByRole('button', { name: 'view' }).click()
+  
+    page.on('dialog', dialog => dialog.accept())
+  
+    const removeButton = page.getByTestId('remove-button')
+    await expect(removeButton).toBeVisible()
+    await removeButton.click()
+  
+    await expect(page.getByText('Poistettava blogi')).toHaveCount(0)
+  })
+  
 })
