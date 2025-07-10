@@ -2,7 +2,7 @@
 Fullstackopen kurssin tehtävien palautusrepositorio
 
 
-Osiot etenevät branceihittäin:
+Osiot etenevät brancheittäin:
 
 [Osa0](https://github.com/JanneKarki/Fullstackopen/blob/main/osa_0/README.md)
 
