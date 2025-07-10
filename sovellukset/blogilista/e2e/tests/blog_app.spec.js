@@ -49,6 +49,14 @@ describe('When logged in', () => {
       }
     })
 
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name: 'toinen_testaaja',
+        username: 'toinen',
+        password: 'salasanaB'
+      }
+    })
+
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
@@ -116,5 +124,29 @@ describe('When logged in', () => {
   
     await expect(page.getByText('Poistettava blogi')).toHaveCount(0)
   })
+
+  test('only creator sees the remove button', async ({ page, request, browser }) => {
+    
+    await page.getByRole('button', { name: 'new blog' }).click()
+  
+    await page.getByTestId('title').fill('testaajan blogi')
+    await page.getByTestId('author').fill('testaaja')
+    await page.getByTestId('url').fill('http://testaaja.fi')
+    await page.getByRole('button', { name: 'create' }).click()
+  
+    await page.getByText('testaajan blogi').getByRole('button', { name: 'view' }).click()
+    await expect(page.getByRole('button', { name: 'remove' })).toBeVisible()
+  
+    await page.getByRole('button', { name: 'logout' }).click()
+  
+    await page.getByTestId('username').fill('toinen')
+    await page.getByTestId('password').fill('salasanaB')
+    await page.getByRole('button', { name: 'login' }).click()
+  
+    await page.getByText('testaajan blogi').getByRole('button', { name: 'view' }).click()
+  
+    await expect(page.getByRole('button', { name: 'remove' })).toHaveCount(0)
+  })
+  
   
 })
