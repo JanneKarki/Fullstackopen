@@ -1,5 +1,5 @@
 # Fullstackopen
-Fullstack open kurssin tehtävien palautus repositorio
+Fullstack open kurssin tehtävien palautusrepositorio
 
 
 Osiot etenevät branceihittäin:
